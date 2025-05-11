@@ -1,0 +1,199 @@
+---
+title: "Pragmatic Bayes"
+format: 
+  revealjs:
+    theme: [default, custom.scss]
+    incremental: true
+author: Martin Modrák
+date: 2025-05-13
+---
+
+# What is this about? {.dark background-image=https://upload.wikimedia.org/wikipedia/commons/5/51/Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg}
+
+:::{.image-source}
+Modified from <a href="https://commons.wikimedia.org/wiki/File:Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg">http://www.ForestWander.com</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/us/deed.en">CC BY-SA 3.0 US</a>, via Wikimedia Commons,
+https://mc-stan.org/bayesplot/
+:::
+
+
+## I don’t want to convert you {.dark background-image=img/convert_bayes.jpg}
+
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:Jehovah%27s_Witnesses_outside_the_British_Museum_02.jpg">Philafrenzy</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons,
+<a href="https://commons.wikimedia.org/wiki/File:Thomas_Bayes.gif">[2][3]</a>, Public domain, via Wikimedia Commons,
+<a href="https://commons.wikimedia.org/wiki/File:Bayes_icon.jpg">Gnathan87</a>, CC0, via Wikimedia Commons
+:::
+
+## Pragmatic Bayes: a collection of ideas
+
+:::{.fragment}
+### Contrast with full _Bayesian epistemology_
+:::
+:::{.fragment}
+No shaming our subjective/objective Bayesian friends!
+:::
+:::{.fragment}
+
+Epistemology / philsci is not solved
+:::
+:::{.fragment}
+
+### Can we do Bayesian [_statistics_]{.highlight1} without committing to Bayesian [_philosophy_]{.highlight2}?
+:::
+
+:::{.notes}
+You can like some and reject other ideas
+:::
+
+## Outline
+
+
+# Theoretical background {background-image=img/Triang-cyl-sph4.svg.png}
+
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:Triang-cyl-sph4.svg">Ag2gaeh</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
+:::
+
+## Frequentist calibration
+
+- Confidence interval (freq): 
+  - For any fixed parameter value, $x\%$ CI contains the true value $x\%$ of the time.
+  - Worst case
+  - Usually (conservative) approximation
+
+## Bayesian calibration
+
+- Credible interval (Bayes)
+  - Averaged over the prior, $x\%$ CrI contains the true value $x\%$ of the time.
+  - Specific values may lead to low coverage
+  - Usually exact*
+
+## Other inference goals
+
+### Frequentist Test = inverted confidence interval
+
+### Bayes factor = calibrated posterior model probability
+
+:::{.notes}
+We can more or less convert everything into confidence/credible interval
+:::
+
+# Bayesian tools with frequentist philosophy {background-image=img/tail_probs.jpg}
+
+:::{.image-source}
+Modified from <a href="https://commons.wikimedia.org/wiki/File:Null-hypothesis-region-eng.png">Smahdavi4</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
+:::
+
+## Bayes approximates freq
+
+:::{.fragment}
+### [Bernstein-von Mises](https://en.wikipedia.org/wiki/Bernstein%E2%80%93von_Mises_theorem)
+:::
+:::{.fragment}
+
+We do not live in asymptotic utopia
+:::
+
+## Most freq methods are approximations!
+
+- ML + Normal approximation
+- ML + profile likelihood 
+  - $\chi^2$ asymptotics of the likelihood-ratio test
+  - Computationally expensive! <!-- (TODO test confint for complex lmer vs. brms) -->
+
+:::{.notes}
+They are valid only in the asymptotic utopia
+
+Bonus for penalized: problems at boundary values
+  
+
+:::
+
+## Bayesian posterior as a frequentist tool
+
+<!-- TODO brms vs glm.nb -->
+
+:::{.notes}
+“The frequentist theory of Bayesian statistics” https://staff.science.uva.nl/b.j.k.kleijn/bkleijn-book-work-in-progress-Sep2022.pdf
+https://www.jstor.org/stable/pdf/27028770.pdf (dense paper version)
+:::
+
+## It is hard to be a frequentist! 
+
+### (with [exact]{.highlight1} [finite-sample]{.highlight1} guarantees)
+
+- Exact freq computation is _very hard_
+- Freq properties hard to exhaustively check
+- Bayesian computation can be verified ([SBC](https://doi.org/10.1214/23-BA1404), [Yao et al.](https://arxiv.org/abs/2305.14593))
+
+:::{.notes}
+Freq. properties cannot be exhaustively checked empirically
+Bayesian computation can be (SBC + Yao approach)
+
+If we both do Laplace approximations, is there any difference?
+:::
+
+# Pragmatic Bayes
+
+## PB tests their assumptions
+One coherent approach!
+
+## PB understands Bayesian limits
+Selection effects
+Can to an extent be modelled
+Pragmatically: we rarely can build a good model of the selection
+Early stopping
+TODO test coverage
+Freq approaches to early stopping approximate
+And limited (no 3 phase group seq + two recalculations)
+Guidelines explicitly require a ton of simulations if you are proposing a non-standard method (TODO dig the reference)
+
+## PB is not afraid of freq
+Seq designs?
+Freq as approx Bayes
+Can check with SBC
+TODO check freq properties of gamlss vs. brms for small samples
+
+## PB thinks about causality
+McElreath “full luxury”? Bayes
+Causal inference as decision theory (TODO)
+
+## Pragmatic Bayesian builds rich models
+
+E.g. varying scale between groups already difficult in freq
+
+
+## Pragmatic Bayesian aligns inferences with scientific questions
+Inferences on derived quantities, prediction intervals 
+
+Some questions don’t have answers without regularization (e.g. mean of general distribution). Once you regularize, you may as well do Bayes.
+
+
+# My personal non-reasons
+
+Philosophical arguments that I find not very practically useful.
+
+## Priors? 
+
+No!
+
+## Sequential updating? 
+
+No!
+
+
+## Epistemology? 
+
+No!
+
+# Why I use Bayesian tools
+
+## Useful!
+
+## One coherent approach!
+
+## Finite sample guarantees!
+
+## Rich models!
+
+
