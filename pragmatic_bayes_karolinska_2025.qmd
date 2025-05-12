@@ -8,7 +8,7 @@ author: Martin Modrák
 date: 2025-05-13
 ---
 
-# What is this about? {.dark background-image=https://upload.wikimedia.org/wikipedia/commons/5/51/Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg}
+# What is this about? {background-color="black" background-image=img/Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg}
 
 :::{.image-source}
 Modified from <a href="https://commons.wikimedia.org/wiki/File:Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg">http://www.ForestWander.com</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/us/deed.en">CC BY-SA 3.0 US</a>, via Wikimedia Commons,
@@ -16,7 +16,7 @@ https://mc-stan.org/bayesplot/
 :::
 
 
-## I don’t want to convert you {.dark background-image=img/convert_bayes.jpg}
+## I don’t want to convert you {background-color="black" background-image=img/convert_bayes.jpg}
 
 :::{.image-source}
 <a href="https://commons.wikimedia.org/wiki/File:Jehovah%27s_Witnesses_outside_the_British_Museum_02.jpg">Philafrenzy</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons,
@@ -45,10 +45,34 @@ Epistemology / philsci is not solved
 You can like some and reject other ideas
 :::
 
+## Main Influences
+
+Deborah Mayo
+
+Andrew Gelman
+
+Stan community more broadly
+
+Berna Devezer
+
+Danielle J. Navarro
+
+:::{.notes}
+Mayo : severe testing
+
+Gelman : Theoretical stastic is the theory of applied statistics
+
+Stan : solve problems
+
+Devezer : pluralism, rigour
+
+Navarro : hypothesis testing
+:::
+
 ## Outline
 
 
-# Theoretical background {background-image=img/Triang-cyl-sph4.svg.png}
+# Theoretical background {background-image=img/Triang-cyl-sph4.svg.png background-color="black"}
 
 :::{.image-source}
 <a href="https://commons.wikimedia.org/wiki/File:Triang-cyl-sph4.svg">Ag2gaeh</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
@@ -56,29 +80,55 @@ You can like some and reject other ideas
 
 ## Frequentist calibration
 
-- Confidence interval (freq): 
-  - For any fixed parameter value, $x\%$ CI contains the true value $x\%$ of the time.
+#### (continuous parameter)
+
+- Confidence interval: 
+  - For [any fixed]{.highlight1} parameter value, $x\%$ CI contains the true value [at least]{.highlight2} $x\%$ of the time.
   - Worst case
-  - Usually (conservative) approximation
+  - Usually conservative approximation
+
+:::{.notes}
+Replacing the inequality with strict equality would make the interval not exist in many cases.
+
+Generalizes to confidence sets.
+:::
 
 ## Bayesian calibration
 
-- Credible interval (Bayes)
-  - Averaged over the prior, $x\%$ CrI contains the true value $x\%$ of the time.
+#### (continuous parameter)
+
+- Credible interval
+  - [Averaged]{.highlight1} over the prior, $x\%$ CrI contains the true value [exactly]{.highlight2} $x\%$ of the time.
   - Specific values may lead to low coverage
   - Usually exact*
+
+:::{.notes}
+Typically MCMC, so not "exact computation", but we get an imprecise value for the "exact bound"
+
+For discrete parameters need to convert to probability statements
+:::
+
+## Calibration example
+
+<!-- TODO binomial proportion flat prior vs. Clopper-Pearson -->
 
 ## Other inference goals
 
 ### Frequentist Test = inverted confidence interval
 
+:::{.fragment}
 ### Bayes factor = calibrated posterior model probability
-
-:::{.notes}
-We can more or less convert everything into confidence/credible interval
 :::
 
-# Bayesian tools with frequentist philosophy {background-image=img/tail_probs.jpg}
+:::{.notes}
+We can more or less convert every uncertainty statement into confidence/credible interval
+
+squared error, bias not here
+
+
+:::
+
+# Pragmatic Bayesian can outfreq the freq {background-image=img/tail_probs.jpg}
 
 :::{.image-source}
 Modified from <a href="https://commons.wikimedia.org/wiki/File:Null-hypothesis-region-eng.png">Smahdavi4</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
@@ -102,16 +152,18 @@ We do not live in asymptotic utopia
   - Computationally expensive! <!-- (TODO test confint for complex lmer vs. brms) -->
 
 :::{.notes}
+Prove that CLT holds
+
 They are valid only in the asymptotic utopia
 
-Bonus for penalized: problems at boundary values
-  
+For profile likelihood, finding a single confidence bound is slightly more costly than fitting the model
 
+Bonus for penalized: problems at boundary values
 :::
 
-## Bayesian posterior as a frequentist tool
+## Bayes as a freq tool
 
-<!-- TODO brms vs glm.nb -->
+<!-- TODO brms vs glm.nb / mgcv / gamlss -->
 
 :::{.notes}
 “The frequentist theory of Bayesian statistics” https://staff.science.uva.nl/b.j.k.kleijn/bkleijn-book-work-in-progress-Sep2022.pdf
@@ -120,11 +172,11 @@ https://www.jstor.org/stable/pdf/27028770.pdf (dense paper version)
 
 ## It is hard to be a frequentist! 
 
-### (with [exact]{.highlight1} [finite-sample]{.highlight1} guarantees)
+### (with [exact]{.highlight1} [finite-sample]{.highlight2} guarantees)
 
 - Exact freq computation is _very hard_
-- Freq properties hard to exhaustively check
-- Bayesian computation can be verified ([SBC](https://doi.org/10.1214/23-BA1404), [Yao et al.](https://arxiv.org/abs/2305.14593))
+- Freq properties hard to empirically check
+- Bayesian computation can be verified empirically ([SBC](https://doi.org/10.1214/23-BA1404), [Yao et al.](https://arxiv.org/abs/2305.14593))
 
 :::{.notes}
 Freq. properties cannot be exhaustively checked empirically
@@ -133,67 +185,222 @@ Bayesian computation can be (SBC + Yao approach)
 If we both do Laplace approximations, is there any difference?
 :::
 
-# Pragmatic Bayes
+# Pragmatic Bayesian tests their assumptions {background-color="black"}
 
-## PB tests their assumptions
+## Which assumptions?
+
+### All of them
+
+- Prior
+- Likelihood
+- Computation
+- [Bayesian workflow](https://arxiv.org/abs/2011.01808)
+
+:::{.notes}
+Defensible prior often easy to find
+
 One coherent approach!
 
-## PB understands Bayesian limits
-Selection effects
-Can to an extent be modelled
+Assumptions can be tested also in freq, but less obviously.
+:::
+
+## Modern Bayesian computation succeeds or fails loudly {.single-point}
+
+:::{.notes}
+Note how the freq NB GLMs fail, but give no warning
+:::
+
+
+# Pragmatic Bayesian understands Bayesian limits {background-color="black"}
+
+## Selection effects
+
+10 patients get sick, 10 recover. What is the likely recovery probability?
+
+:::{.fragment}
+Should your inference change if you learn that the experimenter would only ever report the results to you if everybody recovered?
+:::
+
+:::{.fragment}
+In Bayesian statistics it should not! 🤯
+
+$$
+\pi_\text{post}(\theta \mid y, \text{ accept(y)}) = \pi_\text{post}(\theta \mid y)
+$$
+:::
+
+:::{.fragment}
+The [likelihood principle]() <!--TODO link -->
+:::
+
+## Selection effects - intuition
+
+Frequentist simulation: 
+
+```
+prob_recovery = some_number
+repeat {
+  y = binomial_rng(N = 10, prob = prob_recovery)
+  if(y == 10) then break
+}
+```
+
+:::{.fragment}
+Bayesian simulation:
+
+```
+repeat {
+  prob_recovery = prior_rng()
+  y = binomial_rng(N = 10, prob = prob_recovery)
+  if(y == 10) then break
+}
+```
+
+:::
+
+:::{.notes}
+The Bayesian answer makes sense under repeated draws from the prior!
+
+In practice there is probably a mix of both types of selection (repeating with fixed value, getting a "new draw from the prior").
+:::
+
+## Modelling selection
+
+Bayesian can model the frequentist process as a truncated distribution.
+
+:::{.fragment}
+In the example, this leads to $\pi_\text{post}(\theta \mid y) = \pi_\text{prior}(\theta)$.
+
+<!-- TOOD link Betancourt -->
+More generally to an interesting [class of models]()
+:::
+
+:::{.fragment}
 Pragmatically: we rarely can build a good model of the selection
-Early stopping
+:::
+
+:::{.notes}
+Example - we want to infer timing of bloom from historical specimens with known date of collection, but only flowering plants are ever collected.
+
+:::
+
+## Early stopping
+
+Should your inferences change when you learn that data collection stopped once $p < 0.05$?
+
+- The likelihood principle says NO
+- No easy cop-out this time
+
+## Early stopping - example
+
 TODO test coverage
-Freq approaches to early stopping approximate
-And limited (no 3 phase group seq + two recalculations)
+
+## Possible solutions to early stopping
+
+- Smarter stopping rules
+- Include time in your model
+
+## Frequentist don't have it all
+- Freq approaches to early stopping approximate
+  - And bespoke/limited 
+- You need simulations anyway
+
+:::{.notes}
+
+Limited: no 3 phase group seq + two recalculations
+
 Guidelines explicitly require a ton of simulations if you are proposing a non-standard method (TODO dig the reference)
+:::
 
-## PB is not afraid of freq
-Seq designs?
-Freq as approx Bayes
-Can check with SBC
-TODO check freq properties of gamlss vs. brms for small samples
+# Pragmatic Bayesian is not afraid of freq {background-color="black"}
 
-## PB thinks about causality
-McElreath “full luxury”? Bayes
+## Some use cases of freq
+
+- Sequential designs
+- Freq as approximate Bayes
+  - Flat prior + normal approximation
+  - Can [check with SBC](https://hyunjimoon.github.io/SBC/articles/implementing_backends.html)
+
+# Pragmatic Bayesian thinks about causality {background-color="black"}
+
+McElreath “full luxury”? Bayes TODO
 Causal inference as decision theory (TODO)
 
-## Pragmatic Bayesian builds rich models
+# Pragmatic Bayesian aligns inferences with scientific questions {background-color="black"}
 
-E.g. varying scale between groups already difficult in freq
+## Rich models 
+
+- Varying scale between groups already difficult in freq
+
+- Differential equations
+
+- hidden Markov models 
 
 
-## Pragmatic Bayesian aligns inferences with scientific questions
-Inferences on derived quantities, prediction intervals 
+:::{.notes}
+HMMs: Hype Vianey
+:::
 
-Some questions don’t have answers without regularization (e.g. mean of general distribution). Once you regularize, you may as well do Bayes.
+## Rich inferences
+
+Inferences on derived quantities, prediction intervals?
+
+- Just compute per sample! 
+
+- Some questions don’t have freq answers without regularization (e.g. mean of general distribution). 
+  - Once you regularize, you may as well do Bayes.
+
+:::{.notes}
+Inference on linear combinations of parameters is already annoying in freq.
+
+Building freq prediction intervals with finite-sample guarantees is hard!
+:::
+
+# My personal non-reasons to use Bayes {background-color="black"}
 
 
-# My personal non-reasons
-
+:::{.notes}
 Philosophical arguments that I find not very practically useful.
+:::
 
-## Priors? 
+## Prior information 
 
 No!
+
+:::{.fragment}
+We can rarely elicit and express precise enough priors
+:::
 
 ## Sequential updating? 
 
 No!
+
+:::{.fragment}
+In practice just fit a big model to all data.
+:::
 
 
 ## Epistemology? 
 
 No!
 
-# Why I use Bayesian tools
+:::{.fragment}
+Severity of tests matters.
+:::
 
-## Useful!
+:::{.fragment}
+Especially no to Bayes factors.
+:::
 
-## One coherent approach!
+# Why I use Bayesian tools {background-color="black"}
 
-## Finite sample guarantees!
+And maybe you should too?
 
-## Rich models!
+## Pragmatic reasons
 
+- Useful!
+- One coherent approach!
+- Finite sample guarantees!
+- Rich models!
 
+### Thanks for your attention!

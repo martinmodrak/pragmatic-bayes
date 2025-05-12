@@ -29,6 +29,7 @@ local_temp_data/
 
 .Rhistory
 
+*.html
 *.docx
 *.docx#
 *_files/
