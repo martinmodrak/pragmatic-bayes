@@ -1,0 +1,205 @@
+[
+  {
+    "objectID": "index.html#i-dont-want-to-convert-you",
+    "href": "index.html#i-dont-want-to-convert-you",
+    "title": "Pragmatic Bayes",
+    "section": "I don’t want to convert you",
+    "text": "I don’t want to convert you\n\nPhilafrenzy, CC BY-SA 4.0, via Wikimedia Commons, [2][3], Public domain, via Wikimedia Commons, Gnathan87, CC0, via Wikimedia Commons"
+  },
+  {
+    "objectID": "index.html#pragmatic-bayes-a-collection-of-ideas",
+    "href": "index.html#pragmatic-bayes-a-collection-of-ideas",
+    "title": "Pragmatic Bayes",
+    "section": "Pragmatic Bayes: a collection of ideas",
+    "text": "Pragmatic Bayes: a collection of ideas\n\n\nContrast with full Bayesian epistemology\n\n\nNo shaming our subjective/objective Bayesian friends!\n\n\nEpistemology / philsci is not solved\n\n\n\nCan we do Bayesian statistics without committing to Bayesian philosophy?\n\n\nYou can like some and reject other ideas"
+  },
+  {
+    "objectID": "index.html#main-influences",
+    "href": "index.html#main-influences",
+    "title": "Pragmatic Bayes",
+    "section": "Main Influences",
+    "text": "Main Influences\nDeborah Mayo\nAndrew Gelman\nStan community more broadly\nBerna Devezer\nDanielle J. Navarro\n\nMayo : severe testing\nGelman : Theoretical stastic is the theory of applied statistics\nStan : solve problems\nDevezer : pluralism, rigour\nNavarro : hypothesis testing\nAnd many others"
+  },
+  {
+    "objectID": "index.html#frequentist-calibration",
+    "href": "index.html#frequentist-calibration",
+    "title": "Pragmatic Bayes",
+    "section": "Frequentist calibration",
+    "text": "Frequentist calibration\n(continuous parameter)\n\nConfidence interval:\n\nFor any fixed parameter value, \\(x\\%\\) CI contains the true value at least \\(x\\%\\) of the time.\nWorst case\nUsually conservative approximation\n\n\n\nReplacing the inequality with strict equality would make the interval not exist in many cases.\nGeneralizes to confidence sets."
+  },
+  {
+    "objectID": "index.html#bayesian-calibration",
+    "href": "index.html#bayesian-calibration",
+    "title": "Pragmatic Bayes",
+    "section": "Bayesian calibration",
+    "text": "Bayesian calibration\n(continuous parameter)\n\nCredible interval\n\nAveraged over the prior, \\(x\\%\\) CrI contains the true value exactly \\(x\\%\\) of the time.\nSpecific values may lead to low coverage\nUsually exact*\n\n\n\nTypically MCMC, so not “exact computation”, but we get an imprecise value for the “exact bound”\nFor discrete parameters need to convert to probability statements"
+  },
+  {
+    "objectID": "index.html#frequentist-calibration-example",
+    "href": "index.html#frequentist-calibration-example",
+    "title": "Pragmatic Bayes",
+    "section": "Frequentist calibration example",
+    "text": "Frequentist calibration example\n\\[\ny \\sim \\text{Binomial}(20, \\theta)\n\\]"
+  },
+  {
+    "objectID": "index.html#other-inference-goals",
+    "href": "index.html#other-inference-goals",
+    "title": "Pragmatic Bayes",
+    "section": "Other inference goals",
+    "text": "Other inference goals\nFrequentist Test = inverted confidence interval\n\n\nBayes factor = calibrated posterior model probability\n\n\nWe can more or less convert every uncertainty statement into confidence/credible interval\nsquared error, bias not here"
+  },
+  {
+    "objectID": "index.html#bayes-approximates-freq",
+    "href": "index.html#bayes-approximates-freq",
+    "title": "Pragmatic Bayes",
+    "section": "Bayes approximates freq",
+    "text": "Bayes approximates freq\n\n\nBernstein-von Mises\n\n\nWe do not live in asymptotic utopia"
+  },
+  {
+    "objectID": "index.html#most-freq-methods-are-approximations",
+    "href": "index.html#most-freq-methods-are-approximations",
+    "title": "Pragmatic Bayes",
+    "section": "Most freq methods are approximations!",
+    "text": "Most freq methods are approximations!\n\nML + Normal approximation\nML + profile likelihood\n\n\\(\\chi^2\\) asymptotics of the likelihood-ratio test\nComputationally expensive!\n\n\n\nProve that CLT holds\nThey are valid only in the asymptotic utopia\nFor profile likelihood, finding a single confidence bound is slightly more costly than fitting the model\nBonus for penalized: problems at boundary values"
+  },
+  {
+    "objectID": "index.html#bayes-as-a-freq-tool---example",
+    "href": "index.html#bayes-as-a-freq-tool---example",
+    "title": "Pragmatic Bayes",
+    "section": "Bayes as a freq tool - example",
+    "text": "Bayes as a freq tool - example\nFitting a negative binomial model, with 4 observations per group:\nFrequentist:\nMASS::glm.nb(y ~ group, data = data)\nBayesian:\nbrms::brm(y ~ group, data = data, family = \"negbinomial\", \n  prior = brms::prior(\"\", class = \"Intercept\"))"
+  },
+  {
+    "objectID": "index.html#bayes-as-a-freq-tool---example-ii",
+    "href": "index.html#bayes-as-a-freq-tool---example-ii",
+    "title": "Pragmatic Bayes",
+    "section": "Bayes as a freq tool - example II",
+    "text": "Bayes as a freq tool - example II\n\n\n“The frequentist theory of Bayesian statistics” https://staff.science.uva.nl/b.j.k.kleijn/bkleijn-book-work-in-progress-Sep2022.pdf https://www.jstor.org/stable/pdf/27028770.pdf (dense paper version)"
+  },
+  {
+    "objectID": "index.html#it-is-hard-to-be-a-frequentist",
+    "href": "index.html#it-is-hard-to-be-a-frequentist",
+    "title": "Pragmatic Bayes",
+    "section": "It is hard to be a frequentist!",
+    "text": "It is hard to be a frequentist!\n(with exact finite-sample guarantees)\n\nExact freq computation is very hard\nFreq properties hard to empirically check\nBayesian computation can be verified empirically (SBC, Yao et al.)\n\n\nFreq. properties cannot be exhaustively checked empirically Bayesian computation can be (SBC + Yao approach)\nIf we both do Laplace approximations, is there any difference?\nchecking lme4 results with rstanarm"
+  },
+  {
+    "objectID": "index.html#which-assumptions",
+    "href": "index.html#which-assumptions",
+    "title": "Pragmatic Bayes",
+    "section": "Which assumptions?",
+    "text": "Which assumptions?\nAll of them\n\nPrior\nLikelihood\nComputation\nBayesian workflow\n\n\nDefensible prior often easy to find\nOne coherent approach!\nAssumptions can be tested also in freq, but less obviously."
+  },
+  {
+    "objectID": "index.html#modern-bayesian-computation-succeeds-or-fails-loudly",
+    "href": "index.html#modern-bayesian-computation-succeeds-or-fails-loudly",
+    "title": "Pragmatic Bayes",
+    "section": "Modern Bayesian computation succeeds or fails loudly",
+    "text": "Modern Bayesian computation succeeds or fails loudly\n\nNote how the freq NB GLMs fail, but give no warning"
+  },
+  {
+    "objectID": "index.html#selection-effects",
+    "href": "index.html#selection-effects",
+    "title": "Pragmatic Bayes",
+    "section": "Selection effects",
+    "text": "Selection effects\n10 patients get sick, 10 recover. What is the likely recovery probability?\n\nShould your inference change if you learn that the experimenter would only ever report the results to you if everybody recovered?\n\n\nIn Bayesian statistics it should not! 🤯\n\\[\n\\pi_\\text{post}(\\theta \\mid y, \\text{ accept(y)}) = \\pi_\\text{post}(\\theta \\mid y)\n\\]\n\n\nThe likelihood principle"
+  },
+  {
+    "objectID": "index.html#selection-effects---intuition",
+    "href": "index.html#selection-effects---intuition",
+    "title": "Pragmatic Bayes",
+    "section": "Selection effects - intuition",
+    "text": "Selection effects - intuition\nFrequentist simulation:\nprob_recovery = some_number\nrepeat {\n  y = binomial_rng(N = 10, prob = prob_recovery)\n  if(y == 10) then break\n}\n\nBayesian simulation:\nrepeat {\n  prob_recovery = prior_rng()\n  y = binomial_rng(N = 10, prob = prob_recovery)\n  if(y == 10) then break\n}\n\n\nThe Bayesian answer makes sense under repeated draws from the prior!\nIn practice there is probably a mix of both types of selection (repeating with fixed value, getting a “new draw from the prior”)."
+  },
+  {
+    "objectID": "index.html#modelling-selection",
+    "href": "index.html#modelling-selection",
+    "title": "Pragmatic Bayes",
+    "section": "Modelling selection",
+    "text": "Modelling selection\nBayesian can model the frequentist process as a truncated distribution.\n\nIn the example, this leads to \\(\\pi_\\text{post}(\\theta \\mid y) = \\pi_\\text{prior}(\\theta)\\).\nMore generally to an interesting class of models\n\n\nPragmatically: we rarely can build a good model of the selection\n\n\nExample - we want to infer timing of bloom from historical specimens with known date of collection, but only flowering plants are ever collected.\nMedical: modelling people who show up at the doctors office"
+  },
+  {
+    "objectID": "index.html#early-stopping",
+    "href": "index.html#early-stopping",
+    "title": "Pragmatic Bayes",
+    "section": "Early stopping",
+    "text": "Early stopping\nShould your inferences change when you learn that data collection stopped once \\(p &lt; 0.05\\)?\n\nThe likelihood principle says NO\nNo easy cop-out this time"
+  },
+  {
+    "objectID": "index.html#early-stopping---example",
+    "href": "index.html#early-stopping---example",
+    "title": "Pragmatic Bayes",
+    "section": "Early stopping - example",
+    "text": "Early stopping - example\nBinomial model, max steps = 10000, optional stopping after each step\n\n\n\nStopping when 95% CrI excludes 0.5\n\n\n\n\n\n\n\n\n\n\n\n\nStopping when 95% CrI excludes 0.4 - 0.6\n\n\n\n\n\n\n\n\n\n\n\n\nStopping when the width of 95% CrI is &lt; 0.1"
+  },
+  {
+    "objectID": "index.html#possible-solutions-to-early-stopping",
+    "href": "index.html#possible-solutions-to-early-stopping",
+    "title": "Pragmatic Bayes",
+    "section": "Possible solutions to early stopping",
+    "text": "Possible solutions to early stopping\n\nSmarter stopping rules\nInclude time in your model\nSimulate to get freq properties\n\nShoutout to bayesflow"
+  },
+  {
+    "objectID": "index.html#frequentist-dont-have-it-all",
+    "href": "index.html#frequentist-dont-have-it-all",
+    "title": "Pragmatic Bayes",
+    "section": "Frequentist don’t have it all",
+    "text": "Frequentist don’t have it all\n\nFreq approaches to early stopping approximate\n\nAnd bespoke/limited\n\nYou need simulations anyway\n\n\nLimited: no 3 phase group seq + two recalculations\nRegulators explicitly require a ton of simulations if you are proposing a non-standard method"
+  },
+  {
+    "objectID": "index.html#some-use-cases-of-freq",
+    "href": "index.html#some-use-cases-of-freq",
+    "title": "Pragmatic Bayes",
+    "section": "Some use cases of freq",
+    "text": "Some use cases of freq\n\nSequential designs\nFreq as approximate Bayes\n\nFlat prior + normal approximation\nCan check with SBC"
+  },
+  {
+    "objectID": "index.html#bayesian-causality",
+    "href": "index.html#bayesian-causality",
+    "title": "Pragmatic Bayes",
+    "section": "Bayesian causality",
+    "text": "Bayesian causality\n\nMcElreath: Full luxury Bayesian inference\nDawid: Causal inference as decision theory\nInverse probability of treatment weighting is the selection framework we discussed\n\n\nWe can jointly estimate IPTW and the main model"
+  },
+  {
+    "objectID": "index.html#rich-models",
+    "href": "index.html#rich-models",
+    "title": "Pragmatic Bayes",
+    "section": "Rich models",
+    "text": "Rich models\n\nVarying scale between groups already difficult in freq\nDifferential equations\nhidden Markov models\nSimulation-based inference (Bayesflow workshop yesterday)\n\n\nHMMs: Hype Vianey"
+  },
+  {
+    "objectID": "index.html#rich-inferences",
+    "href": "index.html#rich-inferences",
+    "title": "Pragmatic Bayes",
+    "section": "Rich inferences",
+    "text": "Rich inferences\nInferences on derived quantities, prediction intervals?\n\nJust compute per sample!\nSome questions don’t have freq answers without regularization (e.g. mean of general distribution).\n\nOnce you regularize, you may as well do Bayes.\n\n\n\nInference on linear combinations of parameters is already annoying in freq.\nBuilding freq prediction intervals with finite-sample guarantees is hard!"
+  },
+  {
+    "objectID": "index.html#prior-information",
+    "href": "index.html#prior-information",
+    "title": "Pragmatic Bayes",
+    "section": "Prior information",
+    "text": "Prior information\nNo!\n\nWe can rarely elicit and express precise enough priors"
+  },
+  {
+    "objectID": "index.html#sequential-updating",
+    "href": "index.html#sequential-updating",
+    "title": "Pragmatic Bayes",
+    "section": "Sequential updating?",
+    "text": "Sequential updating?\nNo!\n\nIn practice just fit a big model to all data."
+  },
+  {
+    "objectID": "index.html#epistemology",
+    "href": "index.html#epistemology",
+    "title": "Pragmatic Bayes",
+    "section": "Epistemology?",
+    "text": "Epistemology?\nNo!\n\nSeverity of tests matters.\n\n\nEspecially no to Bayes factors."
+  },
+  {
+    "objectID": "index.html#pragmatic-reasons",
+    "href": "index.html#pragmatic-reasons",
+    "title": "Pragmatic Bayes",
+    "section": "Pragmatic reasons",
+    "text": "Pragmatic reasons\n\nUseful!\nOne coherent approach!\nFinite sample guarantees!\nRich models!\n\n\n\nThanks for your attention!\nSlide & simulation sources:\nhttps://github.com/martinmodrak/pragmatic-bayes"
+  }
+]

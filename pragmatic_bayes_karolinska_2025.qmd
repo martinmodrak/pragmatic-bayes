@@ -5,6 +5,7 @@ format:
     theme: [default, custom.scss]
     incremental: true
     slide-number: true
+    output-file: index.html
 author: Martin Modrák
 date: 2025-05-13
 ---
