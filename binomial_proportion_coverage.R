@@ -74,7 +74,8 @@ coverage_plot <- function(coverage_for_plot) {
     geom_hline(color = "orangered", yintercept = 0.95) + 
     geom_line() + 
     facet_wrap(~label) +
-    coord_cartesian(ylim = c(0.9, 1))
+    coord_cartesian(ylim = c(0.9, 1)) +
+    scale_x_continuous("True proportion")
   
 }
 

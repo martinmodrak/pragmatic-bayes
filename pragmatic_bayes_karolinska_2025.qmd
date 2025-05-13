@@ -77,6 +77,8 @@ Stan : solve problems
 Devezer : pluralism, rigour
 
 Navarro : hypothesis testing
+
+And many others
 :::
 
 
@@ -116,11 +118,17 @@ Typically MCMC, so not "exact computation", but we get an imprecise value for th
 For discrete parameters need to convert to probability statements
 :::
 
-## Calibration example
+## Frequentist calibration example
 
+$$
+y \sim \text{Binomial}(20, \theta)
+$$
+
+:::{.fragment}
 ```{r binomial-prop}
 source("binomial_proportion_coverage.R")
 ```
+:::
 
 ## Other inference goals
 
