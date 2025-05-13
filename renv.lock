@@ -28,6 +28,13 @@
       ],
       "Hash": "00077243042334c50b74cdfafe172870"
     },
+    "HDInterval": {
+      "Package": "HDInterval",
+      "Version": "0.2.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b5b77433b286dd869ff33ee7fd5c545f"
+    },
     "KernSmooth": {
       "Package": "KernSmooth",
       "Version": "2.23-24",
@@ -155,6 +162,16 @@
         "utils"
       ],
       "Hash": "2288423bb0f20a457800d7fc47f6aa54"
+    },
+    "assertthat": {
+      "Package": "assertthat",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "tools"
+      ],
+      "Hash": "50c838a310445e954bc13f26f26a6ecf"
     },
     "backports": {
       "Package": "backports",
@@ -651,9 +668,25 @@
       ],
       "Hash": "7f48af39fa27711ea5fbd183b399920d"
     },
+    "furrr": {
+      "Package": "furrr",
+      "Version": "0.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "future",
+        "globals",
+        "lifecycle",
+        "purrr",
+        "rlang",
+        "vctrs"
+      ],
+      "Hash": "da7a4c32196cb2262a41dd5a25d486ff"
+    },
     "future": {
       "Package": "future",
-      "Version": "1.40.0",
+      "Version": "1.49.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -665,7 +698,7 @@
         "parallelly",
         "utils"
       ],
-      "Hash": "b70fbf0e3cfb7efcdfde3643365aee7e"
+      "Hash": "cc19672e849529f5d112fa4fde291625"
     },
     "future.apply": {
       "Package": "future.apply",
@@ -680,6 +713,19 @@
         "utils"
       ],
       "Hash": "0efead26b03bb60716ed29971b1953dc"
+    },
+    "future.mirai": {
+      "Package": "future.mirai",
+      "Version": "0.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "future",
+        "mirai",
+        "parallelly",
+        "utils"
+      ],
+      "Hash": "bd6573cdb77ae2b463bf9d449512db95"
     },
     "generics": {
       "Package": "generics",
@@ -733,14 +779,14 @@
     },
     "globals": {
       "Package": "globals",
-      "Version": "0.17.0",
+      "Version": "0.18.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "codetools"
       ],
-      "Hash": "b3789a625be4a9825af3f7aff4e85223"
+      "Hash": "0e0c37bd3108b8835c99eaa4d83cf6f5"
     },
     "glue": {
       "Package": "glue",
@@ -1016,6 +1062,17 @@
       ],
       "Hash": "18e9c28c1d3ca1560ce30658b22ce104"
     },
+    "mirai": {
+      "Package": "mirai",
+      "Version": "2.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "nanonext"
+      ],
+      "Hash": "469c3356c425d8908c3bd9cc32556d20"
+    },
     "munsell": {
       "Package": "munsell",
       "Version": "0.5.1",
@@ -1037,6 +1094,16 @@
         "stats"
       ],
       "Hash": "c7241e6be9d6df551a2e539a50f5c875"
+    },
+    "nanonext": {
+      "Package": "nanonext",
+      "Version": "1.5.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "e0b0cc584b30905433fdd976f21eba6a"
     },
     "nleqslv": {
       "Package": "nleqslv",
@@ -1095,7 +1162,7 @@
     },
     "parallelly": {
       "Package": "parallelly",
-      "Version": "1.43.0",
+      "Version": "1.44.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1103,7 +1170,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "ca40f736e4d2dc6981c1dc9d14ea3dcf"
+      "Hash": "b086ce058cec94982442e6d6be4aa14f"
     },
     "pillar": {
       "Package": "pillar",
@@ -1241,6 +1308,19 @@
         "vctrs"
       ],
       "Hash": "cc8b5d43f90551fa6df0a6be5d640a4f"
+    },
+    "qrcode": {
+      "Package": "qrcode",
+      "Version": "0.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "assertthat",
+        "stats",
+        "utils"
+      ],
+      "Hash": "e74a28e63bd943ef0c662d2feffdcb41"
     },
     "rappdirs": {
       "Package": "rappdirs",

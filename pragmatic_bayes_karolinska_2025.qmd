@@ -4,9 +4,19 @@ format:
   revealjs:
     theme: [default, custom.scss]
     incremental: true
+    slide-number: true
 author: Martin Modrák
 date: 2025-05-13
 ---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+theme_set(theme_minimal(base_size = 20))
+cache_dir <- "sim_cache"
+```
+
 
 # What is this about? {background-color="black" background-image=img/Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg}
 
@@ -69,8 +79,6 @@ Devezer : pluralism, rigour
 Navarro : hypothesis testing
 :::
 
-## Outline
-
 
 # Theoretical background {background-image=img/Triang-cyl-sph4.svg.png background-color="black"}
 
@@ -110,7 +118,9 @@ For discrete parameters need to convert to probability statements
 
 ## Calibration example
 
-<!-- TODO binomial proportion flat prior vs. Clopper-Pearson -->
+```{r binomial-prop}
+source("binomial_proportion_coverage.R")
+```
 
 ## Other inference goals
 
@@ -149,8 +159,8 @@ We do not live in asymptotic utopia
 - ML + Normal approximation
 - ML + profile likelihood 
   - $\chi^2$ asymptotics of the likelihood-ratio test
-  - Computationally expensive! <!-- (TODO test confint for complex lmer vs. brms) -->
-
+  - Computationally expensive! 
+  
 :::{.notes}
 Prove that CLT holds
 
@@ -161,9 +171,49 @@ For profile likelihood, finding a single confidence bound is slightly more costl
 Bonus for penalized: problems at boundary values
 :::
 
-## Bayes as a freq tool
+## Bayes as a freq tool - example
 
-<!-- TODO brms vs glm.nb / mgcv / gamlss -->
+Fitting a negative binomial model, with 4 observations per group:
+
+Frequentist:
+
+```r
+MASS::glm.nb(y ~ group, data = data)
+```
+
+Bayesian:
+
+```r
+brms::brm(y ~ group, data = data, family = "negbinomial", 
+  prior = brms::prior("", class = "Intercept"))
+```
+
+## Bayes as a freq tool - example II
+
+```{r bayes-freq}
+coverage_cache_file <- file.path(cache_dir, "nb_coverage.rds")
+if(!file.exists(coverage_cache_file)) {
+  source("nb_coverage.R")
+} 
+
+nb_coverage_df <- readRDS(coverage_cache_file)
+
+nb_coverage_df |> 
+  mutate(covered = b >= ci_low & b <= ci_high) |> 
+  group_by(method, b, phi) |> 
+  summarise(coverage = mean(covered),
+            n_covered = sum(covered),
+            coverage_low = qbeta(0.025, n_covered, n() - n_covered + 1),
+            coverage_high = qbeta(0.975, n_covered + 1 , n() - n_covered ),
+            .groups = "drop"
+  ) |> 
+  ggplot()  + aes(x = b, ymin = coverage_low, y = coverage, ymax = coverage_high) +
+  geom_hline(color = "orangered", yintercept = 0.95) +
+  geom_ribbon(fill = "#888", alpha = 0.3) +
+  geom_line() + facet_grid(method~phi, labeller = "label_both") + 
+  scale_x_continuous("True fold change")
+```
+
 
 :::{.notes}
 “The frequentist theory of Bayesian statistics” https://staff.science.uva.nl/b.j.k.kleijn/bkleijn-book-work-in-progress-Sep2022.pdf
@@ -183,9 +233,15 @@ Freq. properties cannot be exhaustively checked empirically
 Bayesian computation can be (SBC + Yao approach)
 
 If we both do Laplace approximations, is there any difference?
+
+checking lme4 results with rstanarm
 :::
 
-# Pragmatic Bayesian tests their assumptions {background-color="black"}
+# Pragmatic Bayesian tests their assumptions {background-color="black" background-image=img/Test.jpeg}
+
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:Test_(student_assessment).jpeg">KF</a>, Public domain, via Wikimedia Commons
+:::
 
 ## Which assumptions?
 
@@ -211,7 +267,11 @@ Note how the freq NB GLMs fail, but give no warning
 :::
 
 
-# Pragmatic Bayesian understands Bayesian limits {background-color="black"}
+# Pragmatic Bayesian understands Bayesian limits {background-color="black" background-image=img/Safety_Signs.JPG}
+
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:Safety_Signs.JPG">TeWeBs</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
+:::
 
 ## Selection effects
 
@@ -230,7 +290,7 @@ $$
 :::
 
 :::{.fragment}
-The [likelihood principle]() <!--TODO link -->
+The [likelihood principle](https://en.wikipedia.org/wiki/Likelihood_principle)
 :::
 
 ## Selection effects - intuition
@@ -271,7 +331,6 @@ Bayesian can model the frequentist process as a truncated distribution.
 :::{.fragment}
 In the example, this leads to $\pi_\text{post}(\theta \mid y) = \pi_\text{prior}(\theta)$.
 
-<!-- TOOD link Betancourt -->
 More generally to an interesting [class of models]()
 :::
 
@@ -281,6 +340,8 @@ Pragmatically: we rarely can build a good model of the selection
 
 :::{.notes}
 Example - we want to infer timing of bloom from historical specimens with known date of collection, but only flowering plants are ever collected.
+
+Medical: modelling people who show up at the doctors office
 
 :::
 
@@ -293,12 +354,68 @@ Should your inferences change when you learn that data collection stopped once $
 
 ## Early stopping - example
 
-TODO test coverage
+Binomial model, max steps = 10000, optional stopping after each step
+
+:::: {.columns}
+
+::: {.column width="33%"}
+
+:::{.fragment}
+
+Stopping when 95% CrI excludes 0.5
+
+```{r early-stop}
+#| fig-width: 3.5
+#| fig-height: 3.5
+source("binomial_early_stop.R")
+lims <- expand_limits(y = c(0.35,1))
+plot_coverage_stop(coverage_stop_05) + lims
+```
+:::
+
+:::
+
+::: {.column width="33%"}
+
+:::{.fragment}
+
+Stopping when 95% CrI excludes 0.4 - 0.6
+
+
+```{r}
+#| fig-width: 3.5
+#| fig-height: 3.5
+plot_coverage_stop(coverage_stop_04_06) + lims
+```
+:::
+
+:::
+
+::: {.column width="33%"}
+
+
+:::{.fragment}
+
+Stopping when the width of 95% CrI is < 0.1
+
+```{r}
+#| fig-width: 3.5
+#| fig-height: 3.5
+plot_coverage_stop(coverage_stop_width_01) + lims
+```
+:::
+
+:::
+
+::::
+
 
 ## Possible solutions to early stopping
 
 - Smarter stopping rules
 - Include time in your model
+- Simulate to get freq properties
+  - Shoutout to bayesflow
 
 ## Frequentist don't have it all
 - Freq approaches to early stopping approximate
@@ -309,10 +426,13 @@ TODO test coverage
 
 Limited: no 3 phase group seq + two recalculations
 
-Guidelines explicitly require a ton of simulations if you are proposing a non-standard method (TODO dig the reference)
+Regulators explicitly require a ton of simulations if you are proposing a non-standard method
 :::
 
-# Pragmatic Bayesian is not afraid of freq {background-color="black"}
+# Pragmatic Bayesian is not afraid of freq {background-color="black" background-image=img/Beyond_the_Dark_Angel_-_metal_band_photo.jpg}
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:Beyond_the_Dark_Angel_-_metal_band_photo.jpg">Lukáš Beneda</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
+:::
 
 ## Some use cases of freq
 
@@ -321,12 +441,29 @@ Guidelines explicitly require a ton of simulations if you are proposing a non-st
   - Flat prior + normal approximation
   - Can [check with SBC](https://hyunjimoon.github.io/SBC/articles/implementing_backends.html)
 
-# Pragmatic Bayesian thinks about causality {background-color="black"}
+# Pragmatic Bayesian thinks about causality {background-color="black" background-image=img/Causal_assumptions_for_developing_bias-minimized_models_for_markers_of_imminent_myocardial_infarction.webp}
 
-McElreath “full luxury”? Bayes TODO
-Causal inference as decision theory (TODO)
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:Causal_assumptions_for_developing_bias-minimized_models_for_markers_of_imminent_myocardial_infarction.webp">Authors of the study: Stefan Gustafsson, Erik Lampa, Karin Jensevik Eriksson, Adam S. Butterworth, Sölve Elmståhl, Gunnar Engström, Kristian Hveem, Mattias Johansson, Arnulf Langhammer, Lars Lind, Kristi Läll, Giovanna Masala, Andres Metspalu, Conchi Moreno-Iribas, Peter M. Nilsson, Markus Perola, Birgit Simell, Hemmo Sipsma, Bjørn Olav Åsvold, Erik Ingelsson, Ulf Hammar, Andrea Ganna, Bodil Svennblad, Tove Fall &amp; Johan Sundström</a>, <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>, via Wikimedia Commons
+:::
 
-# Pragmatic Bayesian aligns inferences with scientific questions {background-color="black"}
+## Bayesian causality
+
+- McElreath: [Full luxury Bayesian  inference](https://elevanth.org/blog/2021/06/29/regression-fire-and-dangerous-things-3-3/)
+
+- Dawid: [Causal inference as decision theory](http://dx.doi.org/10.1515/jci-2020-0008)
+
+- Inverse probability of treatment weighting is the selection framework we discussed
+
+:::{.notes}
+We can jointly estimate IPTW and the main model
+:::
+
+# Pragmatic Bayesian aligns inferences with scientific questions {background-color="black" background-image=img/Custom_Made_Globes.jpg}
+
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:Cartographic_Publishing_-_Custom_Made_Globes_(NBY_5792).jpg">Bergin, Jerry</a>, Public domain, via Wikimedia Commons
+:::
 
 ## Rich models 
 
@@ -334,8 +471,9 @@ Causal inference as decision theory (TODO)
 
 - Differential equations
 
-- hidden Markov models 
+- hidden Markov models
 
+- Simulation-based inference (Bayesflow workshop yesterday)
 
 :::{.notes}
 HMMs: Hype Vianey
@@ -356,8 +494,11 @@ Inference on linear combinations of parameters is already annoying in freq.
 Building freq prediction intervals with finite-sample guarantees is hard!
 :::
 
-# My personal non-reasons to use Bayes {background-color="black"}
+# My personal non-reasons to use Bayes {background-color="black" background-image=img/West_Africa.jpg}
 
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:West_Africa_(2175061620).jpg">Steve Evans from Citizen of the World</a>, <a href="https://creativecommons.org/licenses/by/2.0">CC BY 2.0</a>, via Wikimedia Commons
+:::
 
 :::{.notes}
 Philosophical arguments that I find not very practically useful.
@@ -392,9 +533,13 @@ Severity of tests matters.
 Especially no to Bayes factors.
 :::
 
-# Why I use Bayesian tools {background-color="black"}
+# Why I use Bayesian tools {.lower background-color="black" background-image=img/EXCITE_2024.jpg} 
 
 And maybe you should too?
+
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:EXCITE_2024-_Launch_and_Recovery_(SVS14726_-_5_-_EXCITE_Balloon_Inflates).jpg">NASA&#039;s Scientific Visualization Studio - Advocates in Manpower Management, Inc./Sophia Roberts, University of Maryland College Park/Jeanette Kazmierczak</a>, Public domain, via Wikimedia Commons
+:::
 
 ## Pragmatic reasons
 
@@ -403,4 +548,18 @@ And maybe you should too?
 - Finite sample guarantees!
 - Rich models!
 
+:::{.fragment}
 ### Thanks for your attention!
+
+Slide & simulation sources:   
+[https://github.com/martinmodrak/pragmatic-bayes](https://github.com/martinmodrak/pragmatic-bayes)
+
+:::{.qrcode}
+```{r qr, fig.width=3,fig.height=3}
+plot(qrcode::qr_code("https://github.com/martinmodrak/pragmatic-bayes"))
+```
+
+:::
+
+:::
+

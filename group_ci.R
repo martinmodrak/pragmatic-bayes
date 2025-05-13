@@ -14,10 +14,12 @@ group <- c(rep(0, 4), rep(1, 4))
 # proof of concept
 y <- rnegbin(8, mu = exp(mu_0 + group_eff * group), 
              theta = true_theta)
-confint(glm.nb(y ~ group))
 confint(glm.nb(y ~ group))[2, ]
 
-fit_brm <- brms::brm(y ~ group, data = data.frame(y, group), family = "negbinomial")
+prior <- c(
+  prior("", class = "Intercept")
+)
+fit_brm <- brms::brm(y ~ group, data = data.frame(y, group), family = "negbinomial", prior = prior)
 fixef(fit_brm)["group", c(3,4)]
 # simulation
 nsim <- 100
@@ -26,7 +28,19 @@ res <- t(replicate(nsim, {
   y <- rnegbin(8, mu = exp(mu_0 + group_eff * group), 
                theta = true_theta)
   cf_freq <- suppressMessages(confint(glm.nb(y ~ group))[2, ])
-  fit_brm <- brms::brm(y ~ group, data = data.frame(y, group), family = "negbinomial", refresh = 0)
+  for(i in 1:3) {
+    fit_brm <- brms::brm(y ~ group, data = data.frame(y, group), family = "negbinomial", 
+                         refresh = 0, 
+                         init = 0.1,
+                         prior = prior)
+    
+    if(all(!is.na(rstan::get_bfmi(fit_brm$fit)))) {
+      break
+    }
+  }
+  if(any(is.na(rstan::get_bfmi(fit_brm$fit)))) {
+    stop("BFMI")
+  }
   cf_brm <- fixef(fit_brm)["group", c(3,4)]
   c(cf_freq, cf_brm)
 })
