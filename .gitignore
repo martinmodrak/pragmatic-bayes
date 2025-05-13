@@ -29,7 +29,7 @@ local_temp_data/
 
 .Rhistory
 
-*.html
+/*.html
 *.docx
 *.docx#
 *_files/
