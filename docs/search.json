@@ -67,7 +67,7 @@
     "href": "index.html#bayes-as-a-freq-tool---example",
     "title": "Pragmatic Bayes",
     "section": "Bayes as a freq tool - example",
-    "text": "Bayes as a freq tool - example\nFitting a negative binomial model, with 4 observations per group:\nFrequentist:\nMASS::glm.nb(y ~ group, data = data)\nBayesian:\nbrms::brm(y ~ group, data = data, family = \"negbinomial\", \n  prior = brms::prior(\"\", class = \"Intercept\"))"
+    "text": "Bayes as a freq tool - example\nFitting a negative binomial model, with 4 observations per group:\nFrequentist via MASS package:\nMASS::glm.nb(y ~ group, data = data)\nFrequentist via gamlss package:\ngamlss::gamlss(y ~ group, family = \"NBI\")\nBayesian with flat prior via brms package:\nbrms::brm(y ~ group, data = data, family = \"negbinomial\", \n  prior = brms::prior(\"\", class = \"Intercept\"))"
   },
   {
     "objectID": "index.html#bayes-as-a-freq-tool---example-ii",

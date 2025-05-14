@@ -404,6 +404,16 @@ Martin Modrák
 
   <p class="date">2025-05-13</p>
 </section>
+<section class="slide level2">
+
+<!--
+Notes to improve next time:
+Frequentist calibration example - it has Bayesian methods, but shows freq calibration
+"one coherent approach" not emphasized enough
+Didn't really mention on philosophical commitments to nature of probability
+More emphasize that I want to solve problems - typically estimation problems
+-->
+</section>
 <section>
 <section id="what-is-this-about" class="title-slide slide level1 center" data-background-color="black" data-background-image="img/Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg">
 <h1>What is this about?</h1>
@@ -618,11 +628,13 @@ y \sim \text{Binomial}(20, \theta)
 <section id="bayes-as-a-freq-tool---example" class="slide level2">
 <h2>Bayes as a freq tool - example</h2>
 <p>Fitting a negative binomial model, with 4 observations per group:</p>
-<p>Frequentist:</p>
+<p>Frequentist via <code>MASS</code> package:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>MASS<span class="sc">::</span><span class="fu">glm.nb</span>(y <span class="sc">~</span> group, <span class="at">data =</span> data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Bayesian:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>brms<span class="sc">::</span><span class="fu">brm</span>(y <span class="sc">~</span> group, <span class="at">data =</span> data, <span class="at">family =</span> <span class="st">"negbinomial"</span>, </span>
-<span id="cb2-2"><a></a>  <span class="at">prior =</span> brms<span class="sc">::</span><span class="fu">prior</span>(<span class="st">""</span>, <span class="at">class =</span> <span class="st">"Intercept"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Frequentist via <code>gamlss</code> package:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>gamlss<span class="sc">::</span><span class="fu">gamlss</span>(y <span class="sc">~</span> group, <span class="at">family =</span> <span class="st">"NBI"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Bayesian with flat prior via <code>brms</code> package:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>brms<span class="sc">::</span><span class="fu">brm</span>(y <span class="sc">~</span> group, <span class="at">data =</span> data, <span class="at">family =</span> <span class="st">"negbinomial"</span>, </span>
+<span id="cb3-2"><a></a>  <span class="at">prior =</span> brms<span class="sc">::</span><span class="fu">prior</span>(<span class="st">""</span>, <span class="at">class =</span> <span class="st">"Intercept"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="bayes-as-a-freq-tool---example-ii" class="slide level2">
 <h2>Bayes as a freq tool - example II</h2>

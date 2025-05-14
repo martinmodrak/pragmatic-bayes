@@ -10,6 +10,14 @@ author: Martin Modrák
 date: 2025-05-13
 ---
 
+<!--
+Notes to improve next time:
+Frequentist calibration example - it has Bayesian methods, but shows freq calibration
+"one coherent approach" not emphasized enough
+Didn't really mention on philosophical commitments to nature of probability
+More emphasize that I want to solve problems - typically estimation problems
+-->
+
 ```{r setup, include=FALSE}
 library(ggplot2)
 library(dplyr)
@@ -184,13 +192,20 @@ Bonus for penalized: problems at boundary values
 
 Fitting a negative binomial model, with 4 observations per group:
 
-Frequentist:
+Frequentist via `MASS` package:
 
 ```r
 MASS::glm.nb(y ~ group, data = data)
 ```
 
-Bayesian:
+Frequentist via `gamlss` package:
+
+```r
+gamlss::gamlss(y ~ group, family = "NBI")
+```
+
+
+Bayesian with flat prior via `brms` package:
 
 ```r
 brms::brm(y ~ group, data = data, family = "negbinomial", 
@@ -208,6 +223,7 @@ if(!file.exists(coverage_cache_file)) {
 nb_coverage_df <- readRDS(coverage_cache_file)
 
 nb_coverage_df |> 
+  filter(!is.na(ci_low), !is.na(ci_high)) |> 
   mutate(covered = b >= ci_low & b <= ci_high) |> 
   group_by(method, b, phi) |> 
   summarise(coverage = mean(covered),
@@ -220,7 +236,7 @@ nb_coverage_df |>
   geom_hline(color = "orangered", yintercept = 0.95) +
   geom_ribbon(fill = "#888", alpha = 0.3) +
   geom_line() + facet_grid(method~phi, labeller = "label_both") + 
-  scale_x_continuous("True fold change")
+  scale_x_continuous("True fold change") + theme(strip.text.y = element_text(size = 10))
 ```
 
 
