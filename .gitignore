@@ -32,7 +32,7 @@ local_temp_data/
 /*.html
 *.docx
 *.docx#
-*_files/
+/*_files/
 *.pdf
 *_cache/
 
