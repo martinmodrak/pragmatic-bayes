@@ -1,6 +1,9 @@
 library(ggplot2)
 library(tidyr)
 library(dplyr)
+library(rstanarm)
+fit_brm <- FALSE
+  
 
 sim_nb_coverage_single <- function(N_per_group, mu, b, phi, sim_id, base_brm) {
   group <- c(rep(0, N_per_group), rep(1, N_per_group))
@@ -12,27 +15,34 @@ sim_nb_coverage_single <- function(N_per_group, mu, b, phi, sim_id, base_brm) {
   cf_glm.nb <- suppressMessages(confint(MASS::glm.nb(y ~ group, data = data))[2, ])
   
   cf_gamlss <- tryCatch({
-  fit_gamlss <- suppressMessages(gamlss::gamlss(y ~ group, family = "NBI"))
+  fit_gamlss <- gamlss::gamlss(y ~ group, family = "NBI", data = data)
   confint(fit_gamlss)[2,]
   }, error = function(e) {return(c(NA,NA))})
+
+  
+  m <- glmmTMB::glmmTMB(y ~ group, family = glmmTMB::nbinom2, data = data)
+  cf_glmmTMB <- confint(m, method = "profile", parm = "group", estimate = FALSE)
   
   # Rarely we get problematic init which results in fitted phi -> infty and bad BFMI 
   # refitting fixes that (more informative prior on phi also would)
-  for(i in 1:5) {
-    fit_brm <- update(base_brm, newdata = data, cores = 1, chains = 2, future = FALSE, backend = "cmdstanr", refresh = 0)
-
-    if(all(!is.na(rstan::get_bfmi(fit_brm$fit)))) {
-      break
+  if(fit_brm) {
+    for(i in 1:5) {
+      fit_brm <- update(base_brm, newdata = data, cores = 1, chains = 2, future = FALSE, backend = "cmdstanr", refresh = 0)
+      
+      if(all(!is.na(rstan::get_bfmi(fit_brm$fit)))) {
+        break
+      }
     }
+    bfmi_problem <- any(is.na(rstan::get_bfmi(fit_brm$fit)))
+    cf_brm <- brms::fixef(fit_brm)["group", c(3,4)]
+  } else {
+    bfmi_problem <- FALSE
+    cf_brm <- c(NA,NA) 
   }
-  bfmi_problem <- any(is.na(rstan::get_bfmi(fit_brm$fit)))
-  cf_brm <- brms::fixef(fit_brm)["group", c(3,4)]
-  # bfmi_problem <- FALSE
-  # cf_brm <- c(NA,NA) 
 
-  data.frame(method = c("glm.nb", "gamlss", "brms"), sim_id, mu = mu, b = b, phi = phi, N_per_group = N_per_group,
-             ci_low = unname(c(cf_glm.nb[1], cf_gamlss[1], cf_brm[1])), ci_high = unname(c(cf_glm.nb[2], cf_gamlss[2], cf_brm[2])),
-             bfmi_problem = c(FALSE, FALSE, bfmi_problem)
+  data.frame(method = c("glm.nb", "glmmTMB", "gamlss", "brms"), sim_id, mu = mu, b = b, phi = phi, N_per_group = N_per_group,
+             ci_low = unname(c(cf_glm.nb[1], cf_glmmTMB[1], cf_gamlss[1], cf_brm[1])), ci_high = unname(c(cf_glm.nb[2], cf_glmmTMB[2], cf_gamlss[2], cf_brm[2])),
+             bfmi_problem = c(FALSE, FALSE, FALSE, bfmi_problem)
   )
 }
 
@@ -47,13 +57,16 @@ y <- rnbinom(8, mu = exp(mu_0 + group_eff * group),
 prior <- c(
   brms::prior("", class = "Intercept")
 )
-base_brm <- brms::brm(y ~ group, data = data.frame(y, group), family = "negbinomial", prior = prior, backend = "cmdstanr")
+
+rstanarm::stan_glm.nb(y ~ group, data = data.frame(y, group), prior = NULL, prior_intercept = NULL)
 
 
-scenarios <- tidyr::crossing(N_per_group = 4, mu = log(100), b = seq(0, 2, length.out = 10), phi = c(0.5, 1, 2.5, 10), sim_id = 1:1000)
+
+scenarios <- tidyr::crossing(N_per_group = 4, mu = log(100), b = seq(0, 2, length.out = 10), phi = c(0.5, 1, 2.5, 10), sim_id = 1:100)
 #scenarios <- crossing(N_per_group = 4, mu = log(100), b = seq(0, 2, length.out = 5), phi = c(1, 2.5), sim_id = 1:2)
 
 future::plan(future::multisession)
+#future::plan(future::sequential)
 
 nb_coverage_df <- furrr::future_pmap_dfr(scenarios, \(...) sim_nb_coverage_single(..., base_brm = base_brm), .options = furrr::furrr_options(seed = TRUE, chunk_size = 40))
 

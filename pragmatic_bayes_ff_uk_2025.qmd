@@ -5,10 +5,12 @@ format:
     theme: [default, custom.scss]
     incremental: true
     slide-number: true
-    output-file: index.html
 author: Martin Modrák
-date: 2025-05-13
+date: 2025-10-16
 ---
+
+# What is this about? {background-color="black" background-image=img/Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg}
+
 
 <!--
 Notes to improve next time:
@@ -27,8 +29,6 @@ cache_dir <- "sim_cache"
 ```
 
 
-# What is this about? {background-color="black" background-image=img/Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg}
-
 :::{.image-source}
 Modified from <a href="https://commons.wikimedia.org/wiki/File:Night-sky-milky-way-galaxy-astrophotography_-_West_Virginia_-_ForestWander.jpg">http://www.ForestWander.com</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/us/deed.en">CC BY-SA 3.0 US</a>, via Wikimedia Commons,
 https://mc-stan.org/bayesplot/
@@ -38,9 +38,62 @@ https://mc-stan.org/bayesplot/
 ## I don’t want to convert you {background-color="black" background-image=img/convert_bayes.jpg}
 
 :::{.image-source}
-<a href="https://commons.wikimedia.org/wiki/File:Jehovah%27s_Witnesses_outside_the_British_Museum_02.jpg">Philafrenzy</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons,
-<a href="https://commons.wikimedia.org/wiki/File:Thomas_Bayes.gif">[2][3]</a>, Public domain, via Wikimedia Commons,
-<a href="https://commons.wikimedia.org/wiki/File:Bayes_icon.jpg">Gnathan87</a>, CC0, via Wikimedia Commons
+<a href="https://commons.wikimedia.org/wiki/File:Jehovah%27s_Witnesses_outside_the_British_Museum_02.jpg">Philafrenzy</a>, <a href="https://creativecommons.org/licenses/by-nc/4.0">CC-BY-NC 4.0:</a>, by 
+:::
+
+## What is Bayesian statistics?
+
+Coin toss example
+
+:::{.fragment}
+### Using probability distributions to express uncertainty
+:::
+
+:::{.fragment}
+### A coherent framework for updating beliefs
+:::
+
+## The Bayes rule
+
+![](img/bayes_experimentology.png)
+
+:::{.image-source}
+<a href="https://lrissman03.github.io/experimentology/005-estimation.html">Philafrenzy</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, Michael C. Frank, Mika Braginsky 
+:::
+
+:::{.notes}
+Bayes rule alone does not make you a Bayesian!
+:::
+
+## Extracting information from a distribution
+
+All relevant information is in [_expectations_]{.highlight1} and [_quantiles_]{.highlight2}
+
+Can be derived analytically (rarely) 
+
+... or approximated by averages, if we have access
+to draws from the distribution.
+
+
+## Using draws to understand a distribution
+
+Assume $X \sim N(2, 2)$ what is the mean of $X^3$? 
+
+:::{.fragment}
+```{r}
+#| echo: true
+draws <- rnorm(1e6, 2, 2)
+mean(draws^3)
+```
+:::
+
+:::{.fragment}
+What is the 95% interval?
+
+```{r}
+#| echo: true
+quantile(draws^3, c(0.025, 0.975))
+```
 :::
 
 ## Pragmatic Bayes: a collection of ideas
@@ -90,8 +143,71 @@ Navarro : hypothesis testing
 And many others
 :::
 
+# Pragmatic Bayesian aligns inferences with scientific questions {background-color="black" background-image=img/Custom_Made_Globes.jpg}
 
-# Theoretical background {background-image=img/Triang-cyl-sph4.svg.png background-color="black"}
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:Cartographic_Publishing_-_Custom_Made_Globes_(NBY_5792).jpg">Bergin, Jerry</a>, Public domain, via Wikimedia Commons
+:::
+
+## Rich models 
+
+- Varying scale between groups already difficult in freq
+
+- Linear Ballistic Accumulator
+
+- hidden Markov models
+
+- Simulation-based inference
+
+
+## Rich inferences
+
+Inferences on derived quantities, prediction intervals?
+
+- Just compute per sample! 
+
+- Some questions don’t have freq answers without regularization (e.g. mean of general distribution). 
+  - Once you regularize, you may as well do Bayes.
+
+:::{.notes}
+Inference on linear combinations of parameters is already annoying in freq.
+
+Building freq prediction intervals with finite-sample guarantees is hard!
+:::
+
+# Pragmatic Bayesian tests their assumptions {background-color="black" background-image=img/Test.jpeg}
+
+:::{.image-source}
+<a href="https://commons.wikimedia.org/wiki/File:Test_(student_assessment).jpeg">KF</a>, Public domain, via Wikimedia Commons
+:::
+
+## Which assumptions?
+
+### All of them
+
+- Prior
+- Likelihood
+- Computation
+- [Bayesian workflow](https://arxiv.org/abs/2011.01808)
+
+:::{.notes}
+Defensible prior often easy to find
+
+One coherent approach!
+
+Assumptions can be tested also in freq, but less obviously.
+:::
+
+## Modern Bayesian computation succeeds or fails loudly {.single-point}
+
+:::{.notes}
+Note how the freq NB GLMs fail, but give no warning
+:::
+
+
+
+
+# A bit more theory {background-image=img/Triang-cyl-sph4.svg.png background-color="black"}
 
 :::{.image-source}
 <a href="https://commons.wikimedia.org/wiki/File:Triang-cyl-sph4.svg">Ag2gaeh</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
@@ -139,21 +255,69 @@ source("binomial_proportion_coverage.R")
 ```
 :::
 
-## Other inference goals
 
-### Frequentist Test = inverted confidence interval
+## Bayes vs. freq comparison
 
-:::{.fragment}
-### Bayes factor = calibrated posterior model probability
-:::
+Get the code!
+
+Negative binomial regression
+
+- Seizure counts etc.
+- A general model for count data
+
+## Bayes vs. freq comparison II
+
+Fitting a negative binomial model, with 4 observations per group:
+
+Frequentist via `MASS` package:
+
+```r
+MASS::glm.nb(y ~ group, data = data)
+```
+
+Bayesian with flat prior via `rstanarm` package:
+
+```r
+rstanarm::stan_glm.nb(y ~ group, data = data, 
+  prior = NULL, prior_intercept = NULL)
+```
+
+## Frequentist tools don't attain correct coverage of CIs
+
+```{r bayes-freq}
+coverage_cache_file <- file.path(cache_dir, "nb_coverage_ff_uk.rds")
+if(!file.exists(coverage_cache_file)) {
+  source("nb_coverage_ff_uk.R")
+} 
+
+nb_coverage_df <- readRDS(coverage_cache_file)
+
+nb_coverage_df |> 
+  filter(!is.na(ci_low), !is.na(ci_high)) |> 
+  mutate(covered = b >= ci_low & b <= ci_high) |> 
+  group_by(method, b, phi) |> 
+  summarise(coverage = mean(covered),
+            n_covered = sum(covered),
+            coverage_low = qbeta(0.025, n_covered, n() - n_covered + 1),
+            coverage_high = qbeta(0.975, n_covered + 1 , n() - n_covered ),
+            .groups = "drop"
+  ) |> 
+  ggplot()  + aes(x = b, ymin = coverage_low, y = coverage, ymax = coverage_high) +
+  geom_hline(color = "orangered", yintercept = 0.95) +
+  geom_ribbon(fill = "#888", alpha = 0.3) +
+  geom_line() + facet_grid(method~phi, labeller = "label_both") + 
+  scale_x_continuous("True fold change") + theme(strip.text.y = element_text(size = 10))
+```
+
 
 :::{.notes}
-We can more or less convert every uncertainty statement into confidence/credible interval
+Bayesin 95% credible intervals (via brms/rstarm) provide good frequentist properties where
+freq tools do not.
 
-squared error, bias not here
-
-
+“The frequentist theory of Bayesian statistics” https://staff.science.uva.nl/b.j.k.kleijn/bkleijn-book-work-in-progress-Sep2022.pdf
+https://www.jstor.org/stable/pdf/27028770.pdf (dense paper version)
 :::
+
 
 # Pragmatic Bayesian can outfreq the freq {background-image=img/tail_probs.jpg}
 
@@ -188,65 +352,6 @@ For profile likelihood, finding a single confidence bound is slightly more costl
 Bonus for penalized: problems at boundary values
 :::
 
-## Bayes as a freq tool - example
-
-Fitting a negative binomial model, with 4 observations per group:
-
-Frequentist via `MASS` package:
-
-```r
-MASS::glm.nb(y ~ group, data = data)
-```
-
-Frequentist via `gamlss` package:
-
-```r
-gamlss::gamlss(y ~ group, family = "NBI")
-```
-
-
-Bayesian with flat prior via `brms` package:
-
-```r
-brms::brm(y ~ group, data = data, family = "negbinomial", 
-  prior = brms::prior("", class = "Intercept"))
-```
-
-## Frequentist tools don't attain correct coverage of CIs
-
-```{r bayes-freq}
-coverage_cache_file <- file.path(cache_dir, "nb_coverage.rds")
-if(!file.exists(coverage_cache_file)) {
-  source("nb_coverage.R")
-} 
-
-nb_coverage_df <- readRDS(coverage_cache_file)
-
-nb_coverage_df |> 
-  filter(!is.na(ci_low), !is.na(ci_high)) |> 
-  mutate(covered = b >= ci_low & b <= ci_high) |> 
-  group_by(method, b, phi) |> 
-  summarise(coverage = mean(covered),
-            n_covered = sum(covered),
-            coverage_low = qbeta(0.025, n_covered, n() - n_covered + 1),
-            coverage_high = qbeta(0.975, n_covered + 1 , n() - n_covered ),
-            .groups = "drop"
-  ) |> 
-  ggplot()  + aes(x = b, ymin = coverage_low, y = coverage, ymax = coverage_high) +
-  geom_hline(color = "orangered", yintercept = 0.95) +
-  geom_ribbon(fill = "#888", alpha = 0.3) +
-  geom_line() + facet_grid(method~phi, labeller = "label_both") + 
-  scale_x_continuous("True fold change") + theme(strip.text.y = element_text(size = 10))
-```
-
-
-:::{.notes}
-Bayesin 95% credible intervals (via brms/rstarm) provide good frequentist properties where
-freq tools do not.
-
-“The frequentist theory of Bayesian statistics” https://staff.science.uva.nl/b.j.k.kleijn/bkleijn-book-work-in-progress-Sep2022.pdf
-https://www.jstor.org/stable/pdf/27028770.pdf (dense paper version)
-:::
 
 ## It is hard to be a frequentist! 
 
@@ -265,34 +370,6 @@ If we both do Laplace approximations, is there any difference?
 checking lme4 results with rstanarm
 :::
 
-# Pragmatic Bayesian tests their assumptions {background-color="black" background-image=img/Test.jpeg}
-
-:::{.image-source}
-<a href="https://commons.wikimedia.org/wiki/File:Test_(student_assessment).jpeg">KF</a>, Public domain, via Wikimedia Commons
-:::
-
-## Which assumptions?
-
-### All of them
-
-- Prior
-- Likelihood
-- Computation
-- [Bayesian workflow](https://arxiv.org/abs/2011.01808)
-
-:::{.notes}
-Defensible prior often easy to find
-
-One coherent approach!
-
-Assumptions can be tested also in freq, but less obviously.
-:::
-
-## Modern Bayesian computation succeeds or fails loudly {.single-point}
-
-:::{.notes}
-Note how the freq NB GLMs fail, but give no warning
-:::
 
 
 # Pragmatic Bayesian understands Bayesian limits {background-color="black" background-image=img/Safety_Signs.JPG}
@@ -301,161 +378,11 @@ Note how the freq NB GLMs fail, but give no warning
 <a href="https://commons.wikimedia.org/wiki/File:Safety_Signs.JPG">TeWeBs</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
 :::
 
-## Selection effects
+## Important problems
 
-10 patients get sick, 10 recover. What is the likely recovery probability?
+- Selection effects
+- Early stopping
 
-:::{.fragment}
-Should your inference change if you learn that the experimenter would only ever report the results to you if everybody recovered?
-:::
-
-:::{.fragment}
-In Bayesian statistics it should not! 🤯
-
-$$
-\pi_\text{post}(\theta \mid y, \text{ accept(y)}) = \pi_\text{post}(\theta \mid y)
-$$
-:::
-
-:::{.fragment}
-The [likelihood principle](https://en.wikipedia.org/wiki/Likelihood_principle)
-:::
-
-## Selection effects - intuition
-
-Frequentist simulation: 
-
-```
-prob_recovery = some_number
-repeat {
-  y = binomial_rng(N = 10, prob = prob_recovery)
-  if(y == 10) then break
-}
-```
-
-:::{.fragment}
-Bayesian simulation:
-
-```
-repeat {
-  prob_recovery = prior_rng()
-  y = binomial_rng(N = 10, prob = prob_recovery)
-  if(y == 10) then break
-}
-```
-
-:::
-
-:::{.notes}
-The Bayesian answer makes sense under repeated draws from the prior!
-
-In practice there is probably a mix of both types of selection (repeating with fixed value, getting a "new draw from the prior").
-:::
-
-## Modelling selection
-
-Bayesian can model the frequentist process as a truncated distribution.
-
-:::{.fragment}
-In the example, this leads to $\pi_\text{post}(\theta \mid y) = \pi_\text{prior}(\theta)$.
-
-More generally to an interesting [class of models]()
-:::
-
-:::{.fragment}
-Pragmatically: we rarely can build a good model of the selection
-:::
-
-:::{.notes}
-Example - we want to infer timing of bloom from historical specimens with known date of collection, but only flowering plants are ever collected.
-
-Medical: modelling people who show up at the doctors office
-
-:::
-
-## Early stopping
-
-Should your inferences change when you learn that data collection stopped once $p < 0.05$?
-
-- The likelihood principle says NO
-- No easy cop-out this time
-
-## Early stopping - example
-
-Binomial model, max steps = 10000, optional stopping after each step
-
-:::: {.columns}
-
-::: {.column width="33%"}
-
-:::{.fragment}
-
-Stopping when 95% CrI excludes 0.5
-
-```{r early-stop}
-#| fig-width: 3.5
-#| fig-height: 3.5
-source("binomial_early_stop.R")
-lims <- expand_limits(y = c(0.35,1))
-plot_coverage_stop(coverage_stop_05) + lims
-```
-:::
-
-:::
-
-::: {.column width="33%"}
-
-:::{.fragment}
-
-Stopping when 95% CrI excludes 0.4 - 0.6
-
-
-```{r}
-#| fig-width: 3.5
-#| fig-height: 3.5
-plot_coverage_stop(coverage_stop_04_06) + lims
-```
-:::
-
-:::
-
-::: {.column width="33%"}
-
-
-:::{.fragment}
-
-Stopping when the width of 95% CrI is < 0.1
-
-```{r}
-#| fig-width: 3.5
-#| fig-height: 3.5
-plot_coverage_stop(coverage_stop_width_01) + lims
-```
-:::
-
-:::
-
-::::
-
-
-## Possible solutions to early stopping
-
-- Smarter stopping rules
-- Include time in your model
-- Simulate to get freq properties
-  - Shoutout to bayesflow
-
-## Frequentist don't have it all
-- Freq approaches to early stopping approximate
-  - And bespoke/limited 
-- You need simulations anyway
-
-:::{.notes}
-
-Limited: no 3 phase group seq + two recalculations
-
-Regulators explicitly require a ton of simulations if you are proposing a non-standard method
-:::
 
 # Pragmatic Bayesian is not afraid of freq {background-color="black" background-image=img/Beyond_the_Dark_Angel_-_metal_band_photo.jpg}
 :::{.image-source}
@@ -481,46 +408,8 @@ Regulators explicitly require a ton of simulations if you are proposing a non-st
 
 - Dawid: [Causal inference as decision theory](http://dx.doi.org/10.1515/jci-2020-0008)
 
-- Inverse probability of treatment weighting is the selection framework we discussed
 
-:::{.notes}
-We can jointly estimate IPTW and the main model
-:::
 
-# Pragmatic Bayesian aligns inferences with scientific questions {background-color="black" background-image=img/Custom_Made_Globes.jpg}
-
-:::{.image-source}
-<a href="https://commons.wikimedia.org/wiki/File:Cartographic_Publishing_-_Custom_Made_Globes_(NBY_5792).jpg">Bergin, Jerry</a>, Public domain, via Wikimedia Commons
-:::
-
-## Rich models 
-
-- Varying scale between groups already difficult in freq
-
-- Differential equations
-
-- hidden Markov models
-
-- Simulation-based inference (Bayesflow workshop yesterday)
-
-:::{.notes}
-HMMs: Hype Vianey
-:::
-
-## Rich inferences
-
-Inferences on derived quantities, prediction intervals?
-
-- Just compute per sample! 
-
-- Some questions don’t have freq answers without regularization (e.g. mean of general distribution). 
-  - Once you regularize, you may as well do Bayes.
-
-:::{.notes}
-Inference on linear combinations of parameters is already annoying in freq.
-
-Building freq prediction intervals with finite-sample guarantees is hard!
-:::
 
 # My personal non-reasons to use Bayes {background-color="black" background-image=img/West_Africa.jpg}
 
