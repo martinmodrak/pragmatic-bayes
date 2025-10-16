@@ -35,10 +35,10 @@ sim_nb_multiple <- function(N_sims, N_per_group, mu, b, phi) {
     1:N_sims,
     FUN =
       \(sim_id) sim_nb_coverage_single(
-        N_per_group = 4,
-        mu = log(100),
-        b = 1,
-        phi = 0.5,
+        N_per_group = N_per_group,
+        mu = mu,
+        b = b,
+        phi = phi,
         sim_id = sim_id
       )
   )
